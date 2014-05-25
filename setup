@@ -1,0 +1,6 @@
+psql -h localhost -c "create user saushengine2 with password 'saushengine2'"
+psql -h localhost -c "drop database if exists saushengine2"
+psql -h localhost -c "create database saushengine2"
+psql -h localhost -c "grant all privileges on database saushengine2 to saushengine2"
+
+sequel -m migrations postgres://saushengine2:saushengine2@localhost:5432/saushengine2

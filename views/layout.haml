@@ -1,0 +1,70 @@
+!!! 1.1
+%html{:xmlns => "http://www.w3.org/1999/xhtml"}
+  %head
+    %title Anthill
+
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0'}
+    %meta{name: 'robots', content: 'none'}
+    %link{rel:  'stylesheet', href:  '/css/bootstrap.min.css', type:  'text/css'}
+    %link{rel:  'stylesheet', href:  '/css/font-awesome.min.css', type:  'text/css'}
+    %link{rel:  'stylesheet', href:  '/css/jquery-ui.min-1.10.2.css', type:  'text/css'}
+    %link{rel:  'stylesheet', href:  '/css/google-webfonts-cedarville-cursive.css', type: 'text/css'}
+    
+    %script{type: 'text/javascript', src: "/js/jquery.min-1.9.1.js"}
+    %script{type: 'text/javascript', src: "/js/jquery-ui.min-1.10.2.js"}
+    %script{type: 'text/javascript', src: "/js/bootstrap.min.js"}
+
+    / [if lt IE 9]
+      %script{src: "/js/html5.js"}
+    
+
+  %body
+    .container
+      .navbar.navbar-default
+        .container-fluid
+          .navbar-header
+            %a.navbar-brand{href: "/"} 
+              %i.fa.fa-asterisk
+              SaushEngine
+
+          .navbar-collapse.collapse
+            %ul.nav.navbar-nav
+              %li
+                %a{href: "/stats"} 
+                  %i.fa.fa-dashboard
+                  Index stats    
+              %li
+                %a{href: "/add"} 
+                  %i.fa.fa-plus
+                  Add spiders
+              %li
+                %a{href: "/reduce"} 
+                  %i.fa.fa-minus
+                  Reduce spiders
+              %li
+                %a{href: "/logs"} 
+                  %i.fa.fa-file
+                  Logs              
+      =yield
+    %br
+    %footer
+      %p.footer &copy; Chang Sau Sheong 2014
+      
+:css
+  a:link { text-decoration: none; }
+  body { padding-top: 20px; font-family: "Helvetica Neue", Helvetica, Arial, Sans Serif; }
+  p {font-size: 16px; line-height: 140%; }  
+
+
+  .content {
+    background-color: #fff;
+    padding: 20px 20px 20px 20px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+       -moz-border-radius: 3px 3px 3px 3px;
+            border-radius: 3px 3px 3px 3px;
+    -webkit-box-shadow: 0 0px 6px 0px rgba(0,0,0,.3);
+       -moz-box-shadow: 0 0px 6px 0px rgba(0,0,0,.3);
+            box-shadow: 0 0px 6px 0px rgba(0,0,0,.3);
+  }  
+  .center { text-align: center}
+  .footer { text-align:center; color:#999999; }

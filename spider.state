@@ -1,0 +1,22 @@
+---
+pid: 10673
+config: !ruby/object:Puma::Configuration
+  options:
+    :min_threads: 4
+    :max_threads: 32
+    :quiet: false
+    :debug: false
+    :binds:
+    - tcp://0.0.0.0:5914
+    :workers: 0
+    :daemon: false
+    :worker_directory: "/Users/sauchang/projects/saushengine2"
+    :config_file: spider-config.rb
+    :mode: :http
+    :rackup: spider.ru
+    :pidfile: spider.pid
+    :state: spider.state
+    :control_auth_token: 81d446b72b7b971eb19c7da75de9159e
+    :environment: development
+    :server: puma
+    :config: ''
