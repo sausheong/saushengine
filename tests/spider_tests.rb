@@ -16,19 +16,24 @@ TEST_MIME_TYPES = [
   "image/jpeg" 
 ]
 
-class TestScraper < MiniTest::Unit::TestCase
-  include Scraper
+class TestSpider < MiniTest::Unit::TestCase
+  include Spider
   
-  def test_scrub
+  def test_normalize
     TEST_URLS.each do |url|
-      refute_nil scrub(url) 
+      refute_nil normalize(url) 
     end    
   end
   
   def test_mime_type
     TEST_URLS.each_with_index do |url, i|
       assert_equal TEST_MIME_TYPES[i], simple_mime_type(url) 
-
+    end        
+  end
+  
+  def test_index
+    TEST_URLS.each do |url|
+      index(url)
     end    
     
   end
