@@ -7,6 +7,8 @@ Sequel.migration do
       DateTime :updated_at
       String :title, size: 255        
       String :url, size: 255
+      String :mime_type, size: 255
+      String :host, size: 255
     end
     
     create_table :words do

@@ -1,6 +1,7 @@
 require './models'
 require './worker'
 
+
 configure do
   enable :sessions
   set :session_secret, ENV['SESSION_SECRET'] ||= 'my_saucy_secret'
@@ -31,4 +32,8 @@ get "/logs" do
   page_size = params[:page_size] || 10
   @logs = Log.reverse_order(:created_at).paginate(page.to_i, page_size.to_i)
   haml :logs
+end
+
+get "/about" do
+  haml :about
 end
