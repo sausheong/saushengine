@@ -30,12 +30,6 @@ class TestSpider < MiniTest::Unit::TestCase
       assert_equal TEST_MIME_TYPES[i], simple_mime_type(url) 
     end        
   end
-  
-  def test_index
-    TEST_URLS.each do |url|
-      index(url)
-    end    
-    
-  end
+
   
 end
