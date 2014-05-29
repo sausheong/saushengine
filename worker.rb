@@ -9,12 +9,15 @@ require 'rest-client'
 require 'mime-types'
 require 'bunny'
 require 'sanitize'
+require 'open-uri'
 
 module Spider
   
   def index(url)
     
     uri = normalize(url)
+    html = open(url).read
+    
     page = Page[url: uri.to_s]
     
     if !page.nil? and page.updated_at > (DateTime.now - 1).to_time 
@@ -29,13 +32,15 @@ module Spider
     # delete existing locations
     page.remove_all_locations
     
-    words = extract_all_words(url)
+    words = extract_all_words(html)
     words.each_with_index do |word, index|
       stem = word.downcase.stem
       w = Word.find_or_create(stem: stem)
       Location.create(word: w, page: page, position: index)
     end
-    links = extract_links(uri.to_s)
+    
+    links = extract_links(uri, html)
+    
     add_to_queue(links)
   end
   
@@ -51,28 +56,36 @@ module Spider
 
   # i. If it is a relative url, add the base url
   # ii. If authentication is required, add in user name and password   
-  def extract_links(base)
+  def extract_links(uri, html)
     []
   end
   
   # extract words and keywords and return an array
-  def extract_all_words(url)
-    doc = Nokogiri::HTML(RestClient.get(url).to_s)
-    doc.css('script').each { |node| node.remove }
-    doc.css('style').each { |node| node.remove }
-    doc.css('link').each { |node| node.remove }
-    # text = doc.xpath("//text()").text.gsub(/[^a-zA-Z ']/, '')
+  def extract_all_words(html)
+    doc = Nokogiri::HTML(html)
+    keywords = []
+    doc.css("meta[name='keywords']").each do |node|
+      keywords += node['content'].split(",")
+    end
+    text = String.new
+    doc.css("meta[name='description']").each do |node|
+      text += node['content']
+    end
+    
+    %w(script style link meta).each do |tag|
+      doc.css(tag).each { |node| node.remove }
+    end
+
     w = []
     doc.traverse do |node|
       if node.text? then
         w << node.content + " "
       end
     end
-    p w.join.gsub(/\n/, " ").squeeze(' ')
-    # p (text.downcase.split - STOPWORDS)
+    text += w.join.gsub(/\s+/, " ").gsub(/[^a-zA-Z\- ']/, '').squeeze(" ")
+    words = (text.downcase.split - STOPWORDS)
     
-    words, keywords = [], []
-    keywords + words
+    (keywords + words)
   end  
   
   

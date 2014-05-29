@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 require 'celluloid'
 require './worker'
+require 'open-uri'
 
 TEST_URLS = [
   "http://www.ndtv.com/article/world/barack-obama-leaves-afghanistan-after-surprise-troop-visit-530672",
@@ -10,11 +11,22 @@ TEST_URLS = [
   "http://media.npr.org/assets/img/2012/02/02/mona-lisa_custom-31a0453b88a2ebcb12c652bce5a1e9c35730a132-s6-c30.jpg"
 ]
 
-HTML_URLS = TEST_URLS[0..2]
+TEST_FILES = [
+  "./tests/web1.html",
+  "./tests/web2.html",
+  "./tests/web3.html"
+]
+
+TEST_FILES_SIZES = [
+  610,
+  1012,
+  3111
+]
 
 TEST_MIME_TYPES = [
   "text/html",
-  "text/html",
+  "text/html",  
+  "text/html",    
   "application/pdf",
   "image/jpeg" 
 ]
@@ -35,8 +47,9 @@ class TestSpider < MiniTest::Unit::TestCase
   end
 
   def test_extract_all_words
-    HTML_URLS.each do |url|
-      refute_nil extract_all_words(normalize(url).to_s) 
+    TEST_FILES.each_with_index do |file, i|
+      html = open(file).read
+      assert_equal TEST_FILES_SIZES[i], extract_all_words(html).size 
     end    
     
   end
