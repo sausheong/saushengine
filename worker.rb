@@ -39,7 +39,7 @@ module Spider
       Location.create(word: w, page: page, position: index)
     end
     
-    links = extract_links(uri, html)
+    links = extract_all_links(html)
     
     add_to_queue(links)
   end
@@ -56,8 +56,25 @@ module Spider
 
   # i. If it is a relative url, add the base url
   # ii. If authentication is required, add in user name and password   
-  def extract_links(uri, html)
-    []
+  def extract_all_links(html)
+    doc = Nokogiri::HTML(html)
+    links = []
+    doc.css("a").each do |node|
+      
+      begin
+        uri = URI(node['href'])
+        if uri.absolute?      
+          links << uri.to_s
+        elsif uri.path.start_with?("/")
+          puts "** relative link"
+        else
+            
+        end
+      rescue
+        p $!
+      end
+    end    
+    links.uniq
   end
   
   # extract words and keywords and return an array

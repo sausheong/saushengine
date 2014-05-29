@@ -54,4 +54,15 @@ class TestSpider < MiniTest::Unit::TestCase
     
   end
   
+  def test_extract_all_links
+    TEST_FILES.each_with_index do |file, i|
+      html = open(file).read
+      links = extract_all_links(html)
+      links.each do |l|
+        p l
+      end
+    end    
+    
+  end  
+  
 end
