@@ -3,6 +3,7 @@ require 'celluloid'
 require './worker'
 require 'open-uri'
 
+BASE_URL = "http://www.sample.com/samplepath"
 TEST_URLS = [
   "http://www.ndtv.com/article/world/barack-obama-leaves-afghanistan-after-surprise-troop-visit-530672",
   "http://www.詹姆斯.com/",
@@ -21,6 +22,11 @@ TEST_FILES_SIZES = [
   610,
   1012,
   3111
+]
+TEST_FILES_LINK_SIZES = [
+  131,
+  114,
+  26
 ]
 
 TEST_MIME_TYPES = [
@@ -57,12 +63,8 @@ class TestSpider < MiniTest::Unit::TestCase
   def test_extract_all_links
     TEST_FILES.each_with_index do |file, i|
       html = open(file).read
-      links = extract_all_links(html)
-      links.each do |l|
-        p l
-      end
-    end    
-    
+      assert_equal TEST_FILES_LINK_SIZES[i], extract_all_links(html, BASE_URL).size      
+    end        
   end  
   
 end

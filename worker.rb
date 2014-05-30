@@ -8,7 +8,6 @@ require 'addressable/uri'
 require 'rest-client'
 require 'mime-types'
 require 'bunny'
-require 'sanitize'
 require 'open-uri'
 
 module Spider
@@ -56,22 +55,21 @@ module Spider
 
   # i. If it is a relative url, add the base url
   # ii. If authentication is required, add in user name and password   
-  def extract_all_links(html)
+  def extract_all_links(html, base)
+    base_url = URI.parse(base)
     doc = Nokogiri::HTML(html)
     links = []
     doc.css("a").each do |node|
       
       begin
         uri = URI(node['href'])
-        if uri.absolute?      
+        if uri.absolute? and uri.scheme != "javascript"     
           links << uri.to_s
         elsif uri.path.start_with?("/")
-          puts "** relative link"
-        else
-            
+          uri = base_url + uri
         end
       rescue
-        p $!
+        # don't do anything
       end
     end    
     links.uniq
