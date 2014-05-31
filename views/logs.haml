@@ -1,23 +1,30 @@
 .content
-  %table.table
-    %thead
-      %th.col-md-3 Date
-      %th Log
-    %tbody
-      - @logs.each do |entry|
-        %tr
-          %td=entry.created_at.strftime DATETIME_FORMAT
-          %td=entry.content
+  .row
+    .col-md-12
+      .lead.text-info{style: "font-size: 2em;"}
+        %i.fa.fa-file
+        Logs
+  .row
+    .col-md-12
+      %table.table
+        %thead
+          %th.col-md-3 Date
+          %th Log
+        %tbody
+          - @logs.each do |entry|
+            %tr
+              %td=entry.created_at.strftime DATETIME_FORMAT
+              %td=entry.content
 
-  %ul.pagination
-    - unless @logs.first_page?
-      %li
-        %a{href: "/logs"} &laquo;         
-    - @logs.page_count.times do |page_no|
-      %li
-        %a{href: "?page=#{page_no+1}"}
-          =page_no+1
-    - unless @logs.last_page?
-      %li
-        %a{href: "?page=#{@logs.page_count}"} &raquo; 
+      %ul.pagination
+        - unless @logs.first_page?
+          %li
+            %a{href: "/logs"} &laquo;         
+        - @logs.page_count.times do |page_no|
+          %li
+            %a{href: "?page=#{page_no+1}"}
+              =page_no+1
+        - unless @logs.last_page?
+          %li
+            %a{href: "?page=#{@logs.page_count}"} &raquo; 
     

@@ -30,17 +30,13 @@
           .navbar-collapse.collapse
             %ul.nav.navbar-nav
               %li
-                %a{href: "/stats"} 
+                %a{href: "/"} 
                   %i.fa.fa-dashboard
-                  Index stats    
+                  Index
               %li
-                %a{href: "/add"} 
-                  %i.fa.fa-plus
-                  Add spiders
-              %li
-                %a{href: "/reduce"} 
-                  %i.fa.fa-minus
-                  Reduce spiders
+                %a{href: "/spiders"} 
+                  %i.fa.fa-database
+                  Spiders
               %li
                 %a{href: "/logs"} 
                   %i.fa.fa-file
@@ -59,7 +55,7 @@
   a:link { text-decoration: none; }
   body { padding-top: 20px; font-family: "Helvetica Neue", Helvetica, Arial, Sans Serif; }
   p {font-size: 16px; line-height: 140%; }  
-
+  .worker {background-color: lightblue;}
 
   .content {
     background-color: #fff;

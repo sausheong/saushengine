@@ -1,10 +1,35 @@
 .content
+  .row
+    .col-md-9
+      .lead.text-info{style: "font-size: 2em;"}
+        %i.fa.fa-compass
+        SaushEngine
+            
+  
   .row  
-    - if @workers.empty?
-      .col-md-12
-        .lead.center.text-info There are no active spiders at the moment.
-    - @workers.each do |worker|  
-      .col-sm-1.col-md-1
-        .thumbnail.worker.center          
-          %div{style: 'font-size: 2em'}
-            %i.fa.fa-gear{style: 'color: silver;'}                          
+    .col-md-4
+      .thumbnail.center.text-info          
+        %div{style: 'font-size: 5em; padding-top: 30px; '}
+          %i.fa.fa-link
+        %div{style: 'font-size: 1.8em; height: 130px'}
+          #{@qstatus[:message_count]} 
+          %br
+          Links
+    .col-md-4
+      .thumbnail.center.text-info          
+        %div{style: 'font-size: 5em; padding-top: 30px; '}
+          %i.fa.fa-database
+        %div{style: 'font-size: 1.8em; height: 130px'}
+          #{@qstatus[:consumer_count]} 
+          %br
+          Spiders
+    .col-md-4
+      .thumbnail.center.text-info          
+        %div{style: 'font-size: 5em; padding-top: 30px; '}
+          %i.fa.fa-file-text-o
+        %div{style: 'font-size: 1.8em; height: 130px'}
+          #{@page_count} 
+          %br
+          Pages
+          
+    - p @qstatus

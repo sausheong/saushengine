@@ -9,18 +9,18 @@ require 'rest-client'
 require 'mime-types'
 require 'bunny'
 require 'open-uri'
+require 'mimemagic'
 
 module Spider
   
   def index(url)
-    
     uri = normalize(url)
     html = open(url).read
     
     page = Page[url: uri.to_s]
     
     if !page.nil? and page.updated_at > (DateTime.now - 1).to_time 
-      puts "already indexed"
+      info "already indexed"
       return
     end
 
@@ -37,10 +37,10 @@ module Spider
       w = Word.find_or_create(stem: stem)
       Location.create(word: w, page: page, position: index)
     end
-    
-    links = extract_all_links(html)
-    
-    add_to_queue(links)
+    if page.mime_type == "text/html"
+      links = extract_all_links(html, url)    
+      add_to_queue(links)
+    end
   end
   
   def normalize(url)
@@ -48,8 +48,12 @@ module Spider
   end
   
   def simple_mime_type(url)
-    uri = normalize(url).to_s
-    content_type = RestClient.head(uri).headers[:content_type]
+    uri = normalize(url)
+    if uri.scheme == "https" or uri.scheme == "http"
+      content_type = RestClient.head(uri.to_s).headers[:content_type]
+    else
+      content_type = MimeMagic.by_magic(File.open(uri.to_s)).type
+    end
     MIME::Type.new(content_type).simplified
   end
 
@@ -142,9 +146,8 @@ class Worker
     begin
       @consumer = @queue.subscribe(manual_ack: true, block: false) do |delivery_info, properties, body|
         begin
-          p body
-          
-
+          puts "Start indexing #{body}"
+          index body
         rescue Exception => exception
           error exception.message
         end

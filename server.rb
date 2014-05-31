@@ -11,20 +11,31 @@ end
 helpers Loggable
 
 get "/" do
-  @workers = Celluloid::Actor.all
+  conn = Bunny.new
+  conn.start
+  ch = conn.create_channel
+  q = ch.queue "saushengine", durable: true
+  @qstatus = q.status
+  conn.close  
+  @page_count = Page.count
   haml :index
+end
+
+get "/spiders" do
+  @workers = Celluloid::Actor.all
+  haml :spiders
 end
 
 get "/add" do
   worker = Worker.new
   Celluloid::Actor[SecureRandom.uuid.to_sym] = worker
-  redirect "/"
+  redirect "/spiders"
 end
 
 get "/reduce" do
   worker = Celluloid::Actor.all.first
   worker.terminate  
-  redirect "/"
+  redirect "/spiders"
 end
 
 get "/logs" do

@@ -12,11 +12,19 @@ TEST_URLS = [
   "http://media.npr.org/assets/img/2012/02/02/mona-lisa_custom-31a0453b88a2ebcb12c652bce5a1e9c35730a132-s6-c30.jpg"
 ]
 
+TEST_FILES_MIME_TYPE = {
+  "./tests/web1.html" => "text/html",
+  "./tests/web2.html" => "text/html",
+  "./tests/web3.html" => "text/html",
+  "./tests/adobe1.pdf" => "application/pdf"  
+}
+
 TEST_FILES = [
   "./tests/web1.html",
   "./tests/web2.html",
   "./tests/web3.html"
 ]
+
 
 TEST_FILES_SIZES = [
   610,
@@ -50,6 +58,9 @@ class TestSpider < MiniTest::Unit::TestCase
     TEST_URLS.each_with_index do |url, i|
       assert_equal TEST_MIME_TYPES[i], simple_mime_type(url) 
     end        
+    TEST_FILES_MIME_TYPE.each do |url, type|
+      assert_equal type, simple_mime_type(url) 
+    end      
   end
 
   def test_extract_all_words
