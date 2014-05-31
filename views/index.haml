@@ -2,34 +2,33 @@
   .row
     .col-md-9
       .lead.text-info{style: "font-size: 2em;"}
-        %i.fa.fa-compass
-        SaushEngine
+        %i.fa.fa-dashboard
+        Dashboard
             
   
   .row  
     .col-md-4
       .thumbnail.center.text-info          
-        %div{style: 'font-size: 5em; padding-top: 30px; '}
+        %div.dashboard-icon
           %i.fa.fa-link
-        %div{style: 'font-size: 1.8em; height: 130px'}
+        %div.dashboard-thumb
           #{@qstatus[:message_count]} 
           %br
           Links
     .col-md-4
       .thumbnail.center.text-info          
-        %div{style: 'font-size: 5em; padding-top: 30px; '}
+        %div.dashboard-icon
           %i.fa.fa-database
-        %div{style: 'font-size: 1.8em; height: 130px'}
+        %div.dashboard-thumb
           #{@qstatus[:consumer_count]} 
           %br
           Spiders
     .col-md-4
       .thumbnail.center.text-info          
-        %div{style: 'font-size: 5em; padding-top: 30px; '}
+        %div.dashboard-icon
           %i.fa.fa-file-text-o
-        %div{style: 'font-size: 1.8em; height: 130px'}
+        %div.dashboard-thumb
           #{@page_count} 
           %br
           Pages
           
-    - p @qstatus

@@ -2,7 +2,7 @@ require 'sequel'
 
 TIME_FORMAT = 'UTC %l:%M %p'
 DATE_FORMAT = '%d-%b-%Y'
-DATETIME_FORMAT = 'UTC %k:%M, %d-%b-%y'
+DATETIME_FORMAT = '%k:%M, %d-%b-%y'
 DB = Sequel.connect 'postgres://saushengine2:saushengine2@localhost:5432/saushengine2'
 DB.extension :pagination
 

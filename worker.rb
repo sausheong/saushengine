@@ -13,7 +13,7 @@ require 'mimemagic'
 
 module Spider
   
-  def index(url)
+  def index(url, options)
     uri = normalize(url)
     html = open(url).read
     
@@ -37,9 +37,11 @@ module Spider
       w = Word.find_or_create(stem: stem)
       Location.create(word: w, page: page, position: index)
     end
-    if page.mime_type == "text/html"
-      links = extract_all_links(html, url)    
-      add_to_queue(links)
+    unless options[:no_link_extraction]
+      if page.mime_type == "text/html"
+        links = extract_all_links(html, url)    
+        add_to_queue(links)
+      end
     end
   end
   
@@ -131,7 +133,8 @@ class Worker
 
   finalizer :finalizer
   
-  def initialize()
+  def initialize(options={})
+    @options = options
     @conn = Bunny.new(automatically_recover: true)
     @conn.start
     @channel = @conn.create_channel
@@ -147,7 +150,10 @@ class Worker
       @consumer = @queue.subscribe(manual_ack: true, block: false) do |delivery_info, properties, body|
         begin
           puts "Start indexing #{body}"
-          index body
+          options = {}
+          options[:no_link_extraction] = true if @queue.message_count > 10000
+          
+          index body, options
         rescue Exception => exception
           error exception.message
         end
