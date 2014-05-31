@@ -80,7 +80,7 @@ module Spider
     doc = Nokogiri::HTML(html)
     keywords = []
     doc.css("meta[name='keywords']").each do |node|
-      keywords += node['content'].split(",")
+      keywords += node['content'].gsub(/\s+/, " ").gsub(/[^a-zA-Z\- ',]/, '').squeeze(" ").split(",")
     end
     text = String.new
     doc.css("meta[name='description']").each do |node|
@@ -100,7 +100,10 @@ module Spider
     text += w.join.gsub(/\s+/, " ").gsub(/[^a-zA-Z\- ']/, '').squeeze(" ")
     words = (text.downcase.split - STOPWORDS)
     
-    (keywords + words)
+    final = (keywords + words)
+    final.map do |w|
+      w.stem
+    end
   end  
   
   
