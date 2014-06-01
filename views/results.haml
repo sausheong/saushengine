@@ -1,0 +1,30 @@
+.row
+  .col-md-12.center
+    .lead.text-info{style: 'font-size: 2em'} 
+      SaushEngine
+.row        
+  %form{method: :post, action: "/q"}
+    .col-lg-6.col-lg-offset-3
+      .input-group.input-group-lg
+        %input.form-control{type: :text, name: 'text', placeholder: "Ask away!", value: params[:text]}
+        %span.input-group-btn
+          %button.btn.btn-default{type: :submit}
+            %i.fa.fa-search
+
+%br
+
+.row
+  .col-md-12
+    .lead #{@results.count} results
+.row            
+  %ol
+    - @results.each do |result|
+      - page = Page[result[0]]
+
+      %li 
+        %a{style: 'font-size: 1.2em;', href: page.url}=page.title
+        %br
+        %small
+          %a.muted{href: page.url}
+            %i.fa.fa-link
+            =page.url  

@@ -26,7 +26,8 @@ module Spider
 
     if page.nil?
       type = simple_mime_type(url)
-      page = Page.create(url: uri.to_s, host: uri.host, mime_type: type)        
+      title = extract_title html
+      page = Page.create(title: title, url: uri.to_s, host: uri.host, mime_type: type)        
     end
     # delete existing locations
     page.remove_all_locations
@@ -79,6 +80,16 @@ module Spider
       end
     end    
     links.uniq
+  end
+  
+  def extract_title(html)
+    doc = Nokogiri::HTML(html)
+    node = doc.css("title")
+    if node.nil?
+      return ""
+    else
+      return node.text.strip
+    end
   end
   
   # extract words and keywords and return an array

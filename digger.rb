@@ -50,6 +50,8 @@ class Digger
     search_words = words_from text
       
     found_words = Word.where(stem: search_words)
+    return [] if found_words.count == 0
+    
     tables, joins, ids = [], [], []
     found_words.each_with_index { |w, index|
       tables << "locations loc#{index}"
@@ -60,9 +62,7 @@ class Digger
     common_select = "from #{tables.join(', ')} where #{(joins + ids).join(' and ')} group by loc0.page_id"  
     rankings = []
     options[:ranks].each do |algorithm, importance|
-      x.report (algorithm) {
-        rankings << self.send(algorithm, common_select, found_words)
-      }
+      rankings << self.send(algorithm, common_select, found_words)
     end
     merge_rankings rankings
 

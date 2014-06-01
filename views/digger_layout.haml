@@ -1,7 +1,7 @@
 !!! 1.1
 %html{:xmlns => "http://www.w3.org/1999/xhtml"}
   %head
-    %title SaushEngine - Spider
+    %title SaushEngine
 
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0'}
     %meta{name: 'robots', content: 'none'}
@@ -20,33 +20,8 @@
 
   %body
     .container
-      .navbar.navbar-default
-        .container-fluid
-          .navbar-header
-            %a.navbar-brand{href: "/"} 
-              %i.fa.fa-compass
-              SaushEngine
-
-          .navbar-collapse.collapse
-            %ul.nav.navbar-nav
-              %li
-                %a{href: "/"} 
-                  %i.fa.fa-dashboard
-                  Dashboard
-              %li
-                %a{href: "/spiders"} 
-                  %i.fa.fa-database
-                  Spiders
-              %li
-                %a{href: "/logs"} 
-                  %i.fa.fa-file
-                  Logs              
-              %li
-                %a{href: "/about"} 
-                  %i.fa.fa-info-circle
-                  About  
-
       =yield
+          
     %br
     %footer
       %p.footer &copy; Chang Sau Sheong 2014
@@ -69,5 +44,3 @@
   }  
   .center { text-align: center}
   .footer { text-align:center; color:#999999; }
-  .dashboard-thumb {font-size: 1.8em; height: 130px}
-  .dashboard-icon {font-size: 5em; padding-top: 30px;}
