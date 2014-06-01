@@ -1,9 +1,11 @@
 require 'sequel'
+require 'jdbc/postgres'
+Jdbc::Postgres.load_driver
 
 TIME_FORMAT = 'UTC %l:%M %p'
 DATE_FORMAT = '%d-%b-%Y'
 DATETIME_FORMAT = '%k:%M, %d-%b-%y'
-DB = Sequel.connect 'postgres://saushengine2:saushengine2@localhost:5432/saushengine2'
+DB = Sequel.connect 'jdbc:postgresql://localhost:5432/saushengine2?user=saushengine2&password=saushengine2'
 DB.extension :pagination
 
 module Loggable
