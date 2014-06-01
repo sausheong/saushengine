@@ -5,6 +5,6 @@ require 'bundler'
 require 'securerandom'
 
 Bundler.require
-require './spider-ui'
+require './digger-ui'
 
 run Rack::URLMap.new "/" => Sinatra::Application
