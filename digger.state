@@ -1,5 +1,5 @@
 ---
-pid: 42399
+pid: 54798
 config: !ruby/object:Puma::Configuration
   options:
     :min_threads: 4
@@ -16,7 +16,7 @@ config: !ruby/object:Puma::Configuration
     :rackup: digger.ru
     :pidfile: digger.pid
     :state: digger.state
-    :control_auth_token: 49a793664cfc43b999c6a701cccbbcc
+    :control_auth_token: f211bd5a99bdb8e8d89fbf21b62509a
     :environment: development
     :server: puma
     :config: ''

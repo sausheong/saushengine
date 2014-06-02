@@ -10,25 +10,25 @@ module Ranker
   end  
   
   
-  def frequency(common_select, found_words)
+  def frequency(common_select, found_words, importance)
     freq_sql= "select loc0.page_id, count(loc0.page_id) as count #{common_select} order by count desc"
     list = DB.fetch(freq_sql).all
     rank = {}
-    list.size.times { |i| rank[list[i][:page_id]] = list[i].count.to_f/list[0].count.to_f }  
+    list.size.times { |i| rank[list[i][:page_id]] = list[i].count.to_f*importance/list[0].count.to_f }  
     return rank
   end  
   
-  def location(common_select, found_words)
+  def location(common_select, found_words, importance)
     total, group_bys = [], []
     found_words.each_with_index { |w, index| total << "loc#{index}.position + 1"; group_bys << "loc#{index}.position" }
     loc_sql = "select loc0.page_id, (#{total.join(' + ')}) as total #{common_select}, #{group_bys.join(", ")} order by total asc" 
     list = DB.fetch(loc_sql).all
     rank = {}
-    list.size.times { |i| rank[list[i][:page_id]] = list[0][:total].to_f/list[i][:total].to_f }
+    list.size.times { |i| rank[list[i][:page_id]] = list[0][:total].to_f*importance/list[i][:total].to_f }
     return rank
   end
   
-  def distance(common_select, found_words)
+  def distance(common_select, found_words, importance)
     return {} if found_words.count == 1
     dist, total = [], []
     found_words.each_with_index { |w, index| total << "loc#{index}.position" }    
@@ -36,7 +36,7 @@ module Ranker
     dist_sql = "select loc0.page_id, (#{dist.join(' + ')}) as dist #{common_select}, #{total.join(", ")} order by dist asc"  
     list = DB.fetch(dist_sql).all
     rank = Hash.new
-    list.size.times { |i| rank[list[i][:page_id]] = list[0][:dist].to_f/list[i][:dist].to_f }
+    list.size.times { |i| rank[list[i][:page_id]] = list[0][:dist].to_f*importance/list[i][:dist].to_f }
     return rank
   end  
 end
@@ -45,7 +45,7 @@ class Digger
   include Ranker
   attr_accessor :options
   
-  def search(text, options={ranks: {frequency: 0.34, location: 0.33, distance: 0.33 }, size: 50})
+  def search(text, options={ranks: {frequency: 0.60, location: 0.20, distance: 0.20 }, size: 50})
     @options = options
     search_words = words_from text
       
@@ -62,7 +62,7 @@ class Digger
     common_select = "from #{tables.join(', ')} where #{(joins + ids).join(' and ')} group by loc0.page_id"  
     rankings = []
     options[:ranks].each do |algorithm, importance|
-      rankings << self.send(algorithm, common_select, found_words)
+      rankings << self.send(algorithm, common_select, found_words, importance)
     end
     results = merge rankings
     results[0..49]
