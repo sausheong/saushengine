@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'celluloid'
-require './worker'
+require './spider'
 require 'open-uri'
 
 BASE_URL = "http://www.sample.com/samplepath"

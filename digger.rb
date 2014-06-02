@@ -45,7 +45,7 @@ class Digger
   include Ranker
   attr_accessor :options
   
-  def search(text, options={ranks: {frequency: 0.34, location: 0.33, distance: 0.33 }})
+  def search(text, options={ranks: {frequency: 0.34, location: 0.33, distance: 0.33 }, size: 50})
     @options = options
     search_words = words_from text
       
@@ -64,11 +64,11 @@ class Digger
     options[:ranks].each do |algorithm, importance|
       rankings << self.send(algorithm, common_select, found_words)
     end
-    merge_rankings rankings
-
+    results = merge rankings
+    results[0..49]
   end
   
-  def merge_rankings(rankings)
+  def merge(rankings)
     r = {}
     rankings.each do |ranking|
       r.merge!(ranking) do |key, oldval, newval|

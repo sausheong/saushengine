@@ -16,6 +16,9 @@ end
 
 post "/q" do
   digger = Digger.new
-  @results = digger.search params[:text]
+  results = digger.search params[:text]
+  @pages = results.map do |pg|
+    Page[pg[0]]
+  end
   haml :results, layout: :digger_layout
 end

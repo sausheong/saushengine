@@ -1,5 +1,5 @@
 ---
-pid: 37171
+pid: 42398
 config: !ruby/object:Puma::Configuration
   options:
     :min_threads: 4
@@ -16,7 +16,7 @@ config: !ruby/object:Puma::Configuration
     :rackup: spider.ru
     :pidfile: spider.pid
     :state: spider.state
-    :control_auth_token: 813c3fe87fa3d0c5c608e7337b123cd
+    :control_auth_token: 715c542e36ff933fd6e0403f2ba7d9
     :environment: development
     :server: puma
     :config: ''

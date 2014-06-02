@@ -1,5 +1,5 @@
 require './models'
-require './worker'
+require './spider'
 
 
 configure do
