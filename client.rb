@@ -2,7 +2,7 @@ require 'bunny'
 require 'json'
 require 'securerandom'
 
-message = "http://en.wikipedia.org/wiki/Main_Page"
+message = "http://thehub.corp.ebay.com/Pages/ebay.aspx"
 
 conn = Bunny.new
 conn.start

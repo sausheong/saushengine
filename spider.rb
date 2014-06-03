@@ -52,13 +52,15 @@ module Spider
   end
   
   def request_url(url, options)
-    if options[:ntlm]
+    unless options[:ntlm]
       html = open(url).read
     else
-      http = Net::HTTP.new(url)
-      request = Net::HTTP::Get.new('/')
+      u = URI(url)
+      host = "#{u.scheme}://#{u.hostname}"
+      http = Net::HTTP.new(host)
+      request = Net::HTTP::Get.new(u.path)
       request.ntlm_auth(options[:ntlm_user], options[:ntlm_domain], options[:ntlm_password])
-      html = http.request(request)
+      html = http.request(request).body
     end
     html
   end
@@ -176,7 +178,6 @@ class Worker
           puts "Start indexing #{body}"
           options = {}
           options[:no_link_extraction] = true if @queue.message_count > 10000
-          
           index body, options
         rescue Exception => exception
           error exception.message

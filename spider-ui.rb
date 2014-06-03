@@ -21,21 +21,21 @@ get "/" do
   haml :index
 end
 
-get "/spiders" do
-  @workers = Celluloid::Actor.all
-  haml :spiders
+post "/spiders/add" do
+  number = params[:num].to_i
+  number.times do 
+    worker = Worker.new
+    Celluloid::Actor[SecureRandom.uuid.to_sym] = worker
+  end
+  redirect "/"
 end
 
-get "/add" do
-  worker = Worker.new
-  Celluloid::Actor[SecureRandom.uuid.to_sym] = worker
-  redirect "/spiders"
-end
-
-get "/reduce" do
-  worker = Celluloid::Actor.all.first
-  worker.terminate  
-  redirect "/spiders"
+get "/spiders/clear" do
+  workers = Celluloid::Actor.clear_registry
+  workers.values.each do |worker|
+    worker.terminate  
+  end
+  redirect "/"
 end
 
 get "/logs" do

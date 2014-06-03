@@ -1,7 +1,4 @@
 require './stopwords'
-require 'stemmer'
-require './models'
-require 'benchmark'
 
 module Ranker
   def words_from(string)
