@@ -10,12 +10,13 @@ require 'mime-types'
 require 'bunny'
 require 'open-uri'
 require 'mimemagic'
+require 'ntlm/http'
 
 module Spider
   
   def index(url, options)
     uri = normalize(url)
-    html = open(url).read
+    html = request_url(url, options)
     
     page = Page[url: uri.to_s]
     
@@ -48,6 +49,18 @@ module Spider
   
   def normalize(url)
     Addressable::URI.parse(url).normalize
+  end
+  
+  def request_url(url, options)
+    if options[:ntlm]
+      html = open(url).read
+    else
+      http = Net::HTTP.new(url)
+      request = Net::HTTP::Get.new('/')
+      request.ntlm_auth(options[:ntlm_user], options[:ntlm_domain], options[:ntlm_password])
+      html = http.request(request)
+    end
+    html
   end
   
   def simple_mime_type(url)
