@@ -55,10 +55,8 @@ module Spider
     unless options[:ntlm]
       html = open(url).read
     else
-      u = URI(url)
-      host = "#{u.scheme}://#{u.hostname}"
-      http = Net::HTTP.new(host)
-      request = Net::HTTP::Get.new(u.path)
+      http = Net::HTTP.new(url.hostname)
+      request = Net::HTTP::Get.new(url.path)
       request.ntlm_auth(options[:ntlm_user], options[:ntlm_domain], options[:ntlm_password])
       html = http.request(request).body
     end
