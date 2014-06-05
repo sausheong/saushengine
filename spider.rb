@@ -58,7 +58,7 @@ module Spider
         u = normalize(url)
         http = Net::HTTP.new(u.hostname)
         request = Net::HTTP::Get.new(u.path)
-        request.ntlm_auth(options[:ntlm][:user], options[:ntlm][:domain], options[:ntlm][:pass])
+        request.ntlm_auth(options[:user], options[:domain], options[:pass])
         html = http.request(request).body
       rescue
         # do nothing for now
@@ -73,7 +73,7 @@ module Spider
       if options[:ntlm]
         http = Net::HTTP.new(uri.hostname)
         request = Net::HTTP::Head.new(uri.path)
-        request.ntlm_auth(options[:ntlm][:user], options[:ntlm][:domain], options[:ntlm][:pass])
+        request.ntlm_auth(options[:user], options[:domain], options[:pass])
         content_type = http.request(request)['content-type']        
       else        
         content_type = RestClient.head(uri.to_s).headers[:content_type]
@@ -186,9 +186,10 @@ class Worker
         begin
           puts "Start indexing #{body}"
           options = YAML.load(open('spider.cfg').read)
-
           options[:no_link_extraction] = true if @queue.message_count > options[:no_link_extraction_limit]
-          
+          if options[:ntlm]
+            options[:user], options[:domain], options[:pass] = ENV['USER'], ENV['DOMAIN'], ENV['PASS']
+          end
           index body, options
         rescue Exception => exception
           error exception.message
