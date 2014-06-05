@@ -8,7 +8,6 @@ require 'addressable/uri'
 require 'rest-client'
 require 'mime-types'
 require 'bunny'
-require 'open-uri'
 require 'mimemagic'
 require 'ntlm/http'
 
@@ -26,7 +25,7 @@ module Spider
     end
 
     if page.nil?
-      type = simple_mime_type(url)
+      type = simple_mime_type(url, options)
       title = extract_title html
       page = Page.create(title: title, url: uri.to_s, host: uri.host, mime_type: type)        
     end
@@ -57,25 +56,28 @@ module Spider
     else
       begin
         u = normalize(url)
-        p u.hostname
-        p u.path
         http = Net::HTTP.new(u.hostname)
         request = Net::HTTP::Get.new(u.path)
         request.ntlm_auth(options[:ntlm][:user], options[:ntlm][:domain], options[:ntlm][:pass])
-        p request
         html = http.request(request).body
-        p html
       rescue
-        p $!
+        # do nothing for now
       end
     end
     html
   end
   
-  def simple_mime_type(url)
+  def simple_mime_type(url, options)
     uri = normalize(url)
     if uri.scheme == "https" or uri.scheme == "http"
-      content_type = RestClient.head(uri.to_s).headers[:content_type]
+      if options[:ntlm]
+        http = Net::HTTP.new(uri.hostname)
+        request = Net::HTTP::Head.new(uri.path)
+        request.ntlm_auth(options[:ntlm][:user], options[:ntlm][:domain], options[:ntlm][:pass])
+        content_type = http.request(request)['content-type']        
+      else        
+        content_type = RestClient.head(uri.to_s).headers[:content_type]
+      end
     else
       content_type = MimeMagic.by_magic(File.open(uri.to_s)).type
     end
