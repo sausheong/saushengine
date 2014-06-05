@@ -55,10 +55,19 @@ module Spider
     unless options[:ntlm]
       html = open(url).read
     else
-      http = Net::HTTP.new(url.hostname)
-      request = Net::HTTP::Get.new(url.path)
-      request.ntlm_auth(options[:ntlm_user], options[:ntlm_domain], options[:ntlm_password])
-      html = http.request(request).body
+      begin
+        u = normalize(url)
+        p u.hostname
+        p u.path
+        http = Net::HTTP.new(u.hostname)
+        request = Net::HTTP::Get.new(u.path)
+        request.ntlm_auth(options[:ntlm][:user], options[:ntlm][:domain], options[:ntlm][:pass])
+        p request
+        html = http.request(request).body
+        p html
+      rescue
+        p $!
+      end
     end
     html
   end
@@ -174,8 +183,10 @@ class Worker
       @consumer = @queue.subscribe(manual_ack: true, block: false) do |delivery_info, properties, body|
         begin
           puts "Start indexing #{body}"
-          options = {}
-          options[:no_link_extraction] = true if @queue.message_count > 10000
+          options = YAML.load(open('spider.cfg').read)
+
+          options[:no_link_extraction] = true if @queue.message_count > options[:no_link_extraction_limit]
+          
           index body, options
         rescue Exception => exception
           error exception.message
