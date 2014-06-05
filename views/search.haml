@@ -1,0 +1,14 @@
+.row
+  .col-md-12.center{style: 'padding-top: 3em;'}
+    .lead.text-info{style: 'font-size: 3em'} 
+      %i.fa.fa-compass
+      SaushEngine
+%br
+.row        
+  %form{method: :post, action: "/q"}
+    .col-lg-6.col-lg-offset-3
+      .input-group.input-group-lg
+        %input.form-control{type: :text, name: 'text', placeholder: "Ask away!"}
+        %span.input-group-btn
+          %button.btn.btn-info{type: :submit}
+            %i.fa.fa-search

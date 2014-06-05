@@ -1,0 +1,29 @@
+.row
+  .col-md-12.center
+    .lead.text-info{style: 'font-size: 2em'} 
+      %i.fa.fa-compass
+      SaushEngine
+.row        
+  %form{method: :post, action: "/q"}
+    .col-lg-6.col-lg-offset-3
+      .input-group.input-group-lg
+        %input.form-control{type: :text, name: 'text', placeholder: "Ask away!", value: params[:text]}
+        %span.input-group-btn
+          %button.btn.btn-info{type: :submit}
+            %i.fa.fa-search
+
+%br
+
+.row
+  .col-md-12
+    .lead #{@pages.count} results found
+.row            
+  %ol
+    - @pages.each do |page|
+      %li.text-info
+        %a{style: 'font-size: 1.2em;', href: page.url}=page.title
+        %br
+        %small
+          .muted
+            %i.fa.fa-link
+            =page.url  

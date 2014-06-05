@@ -1,0 +1,25 @@
+.content
+  .row
+    .col-md-9
+      .lead.text-info{style: "font-size: 2em;"}
+        %i.fa.fa-database
+        Spiders
+            
+    .col-md-3
+      .btn-group.btn-group-justified
+        %a.btn.btn-success{href: "/add"}
+          %i.fa.fa-plus
+
+        %a.btn.btn-danger{href: "/reduce"}
+          %i.fa.fa-minus
+
+  
+  .row  
+    - if @workers.empty?
+      .col-md-12
+        .lead.center.text-info There are no active spiders at the moment.
+    - @workers.each do |worker|  
+      .col-sm-1.col-md-1
+        .thumbnail.worker.center          
+          %div{style: 'font-size: 2em'}
+            %i.fa.fa-database{style: 'color: white;'}                          

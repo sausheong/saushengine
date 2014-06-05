@@ -1,0 +1,22 @@
+---
+pid: 12787
+config: !ruby/object:Puma::Configuration
+  options:
+    :min_threads: 4
+    :max_threads: 32
+    :quiet: false
+    :debug: false
+    :binds:
+    - tcp://0.0.0.0:4199
+    :workers: 0
+    :daemon: false
+    :worker_directory: /Users/sauchang/projects/saushengine2
+    :config_file: digger-config.rb
+    :mode: :http
+    :rackup: digger.ru
+    :pidfile: digger.pid
+    :state: digger.state
+    :control_auth_token: 413c1535ca8c2467fdd99419d76326ae
+    :environment: development
+    :server: puma
+    :config: ''

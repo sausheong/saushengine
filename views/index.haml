@@ -1,0 +1,48 @@
+.content
+  .row
+    .col-md-9
+      .lead.text-info{style: "font-size: 2em;"}
+        %i.fa.fa-dashboard
+        Dashboard
+            
+    .col-md-3
+      %form.form-inline{method: :post, action: "/spiders/add"}
+        .input-group
+          %select.form-control{name: "num"}
+            %option{value: 1} 1
+            %option{value: 5} 5
+            %option{value: 10} 10
+            %option{value: 20} 20
+          %span.input-group-btn
+            %button.btn.btn-default{type: :submit} 
+              %i.fa.fa-plus
+              Add
+            %a.btn.btn-default{href: "/spiders/clear"} 
+              %i.fa.fa-times
+              Clear
+  .row  
+    .col-md-4
+      .thumbnail.center.text-info          
+        %div.dashboard-icon
+          %i.fa.fa-circle-o-notch.fa-spin
+        %div.dashboard-thumb
+          #{@qstatus[:message_count]} 
+          %br
+          Queued
+    .col-md-4
+      .thumbnail.center.text-info          
+        %div.dashboard-icon
+          %i.fa.fa-database
+        %div.dashboard-thumb
+          #{@qstatus[:consumer_count]} 
+          %br
+          Spiders
+    .col-md-4
+      .thumbnail.center.text-info          
+        %div.dashboard-icon
+          %i.fa.fa-file-text-o
+        %div.dashboard-thumb
+          #{@page_count} 
+          %br
+          Pages
+          

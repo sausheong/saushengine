@@ -1,0 +1,39 @@
+.content
+  .row
+    .col-md-12
+      .lead.text-info{style: "font-size: 2em;"}
+        %i.fa.fa-file
+        Logs
+  - @logs.each do |entry|
+    .row{style: "border-bottom:1px solid silver;"}
+      .col-md-2
+        =entry.created_at.strftime DATETIME_FORMAT
+      .col-md-10
+        =entry.content
+
+
+  %ul.pagination.pagination-sm
+    - unless @logs.page_count == 1
+      - unless @logs.first_page?
+        %li
+          %a{href: "/logs"}
+            %i.fa.fa-step-backward
+
+      - unless @page_range.first == 0
+        %li
+          %a{href: "#"}="..."
+
+      - @page_range.to_a.each do |page_no|
+        %li{class: (page_no+1 == params[:page].to_i) && "active"}
+          %a{href: "?page=#{page_no+1}"}
+            =page_no+1
+
+      - unless @page_range.last == @logs.page_count
+        %li
+          %a{href: "#"}="..."
+
+      - unless @logs.last_page?
+        %li
+          %a{href: "?page=#{@logs.page_count}"}
+            %i.fa.fa-step-forward 
+
