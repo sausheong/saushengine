@@ -2,7 +2,7 @@ require 'bunny'
 require 'json'
 require 'securerandom'
 
-message = "http://thehub.corp.ebay.com/Pages/ebay.aspx"
+message = ARGV[0]
 
 conn = Bunny.new
 conn.start
