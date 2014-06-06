@@ -1,0 +1,2 @@
+puma -C spider-config.rb
+puma -C digger-config.rb

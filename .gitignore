@@ -1,3 +1,3 @@
 .DS_Store
-*.cfg
+*.state
 test_*.rb
