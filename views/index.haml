@@ -1,11 +1,6 @@
 .content
-  .row
-    .col-md-9
-      .lead.text-info{style: "font-size: 2em;"}
-        %i.fa.fa-dashboard
-        Dashboard
-            
-    .col-md-3
+  .row            
+    .col-md-offset-9.col-md-3
       %form.form-inline{method: :post, action: "/spiders/add"}
         .input-group
           %select.form-control{name: "num"}
