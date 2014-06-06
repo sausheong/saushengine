@@ -8,6 +8,8 @@ configure do
   set :protection, except: :session_hijacking  
 end
 
+$ntlm = {}
+
 helpers Loggable
 
 get "/" do
@@ -60,6 +62,15 @@ post "/settings" do
   end
   redirect "/settings"
 end
+
+post "/settings/ntlm" do
+  $ntlm[:ntlm_user] = params[:ntlm_user]
+  $ntlm[:ntlm_domain] = params[:ntlm_domain]
+  $ntlm[:ntlm_pass] = params[:ntlm_pass]
+  redirect "/settings"
+end
+
+
 
 get "/add_url" do
   haml :add_url  

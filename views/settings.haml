@@ -7,10 +7,33 @@
         
   .row
     .col-md-12
+      .lead Configuration
+    .col-md-12
       %form{method: :post, action: "/settings"}
         %textarea.form-control{name: "config", rows: 10}~@config
-        %hr
+        %br
         %button.btn.btn-primary{type: :submit}
           Save
+
+  %hr
         
-            
+  .row
+    .col-md-12
+      .lead NTLM authentication credentials
+    .col-md-12
+      %form{method: :post, action: "/settings/ntlm"}
+        .form-group
+          %label User name
+          %input.form-control{type: :text, name: "ntlm_user", placeholder: "Enter your user name", value: $ntlm[:ntlm_user]}
+        .form-group
+          %label Domain
+          %input.form-control{type: :text, name: "ntlm_domain", placeholder: "Enter your NT domain", value: $ntlm[:ntlm_domain]}
+        .form-group
+          %label 
+            Password
+            %small.muted (Your password will not be shown)
+          %input.form-control{type: :password, name: "ntlm_pass"}
+
+        %br
+        %button.btn.btn-primary{type: :submit}
+          Save        
