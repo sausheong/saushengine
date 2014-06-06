@@ -104,13 +104,24 @@ module Spider
   
   
     # add to queue
-    def add_to_queue(links)
+    def add_to_queue(links, options)
       conn = Bunny.new
       conn.start
       ch = conn.create_channel
       q = ch.queue "saushengine", durable: true
-      links.each do |link|
-        q.publish link, persistent: true
+      
+      if options[:domains] == "*"
+        links.each do |link|
+          q.publish link, persistent: true
+        end        
+      else 
+        domains = options[:domains].split(",").map{|i| i.strip}
+        links.each do |link|
+          uri = Addressable::URI.parse(link).normalize
+          if domains.map{|d| uri.hostname.end_with?(d)}.inject(:|)
+            q.publish link, persistent: true
+          end
+        end        
       end
       conn.close    
     end    
@@ -148,14 +159,14 @@ module Spider
     unless options[:do_not_extract_link]
       links = spider.extract_all_links(type, text, url)    
       unless links.nil? or links.empty?
-        spider.add_to_queue(links)
+        spider.add_to_queue(links, options)
       end
     end
   end
 
   # get the simple mime-type of the given URL
   def simple_mime_type(url, options)
-    uri = normalize(url)
+    uri = Addressable::URI.parse(url).normalize
     if uri.scheme == "https" or uri.scheme == "http"
       if options[:ntlm]
         http = Net::HTTP.new(uri.hostname)
