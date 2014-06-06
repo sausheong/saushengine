@@ -1,6 +1,6 @@
 .content
   .row            
-    .col-md-9
+    .col-md-9{style: "padding-bottom: 20px;"}
       %form{method: :post, action: "/add_url"}
         .input-group
           %input.form-control{ name: "url", placeholder: "Add a seed URL into the queue"}
@@ -9,44 +9,56 @@
               %i.fa.fa-plus
               Add    
     
-    .col-md-3{style: "padding-bottom: 20px;"}
-      %form.form-inline{method: :post, action: "/spiders/add"}
-        .input-group
-          %select.form-control{name: "num"}
-            %option{value: 1} 1
-            %option{value: 5} 5
-            %option{value: 10} 10
-            %option{value: 20} 20
-          %span.input-group-btn
-            %button.btn.btn-default{type: :submit} 
-              %i.fa.fa-plus
-              Add
-            %a.btn.btn-default{href: "/spiders/clear"} 
-              %i.fa.fa-times
-              Clear
+
   .row  
     .col-md-4
       .thumbnail.center.text-info          
-        %div.dashboard-icon
-          %i.fa.fa-circle-o-notch.fa-spin
-        %div.dashboard-thumb
+        .dashboard-icon
+          %i.fa.fa-th
+        .dashboard-thumb
           #{@qstatus[:message_count]} 
           %br
           Queued
+        .dashboard-thumb
+          .col-md-10.col-md-offset-1
+            %a.btn.btn-default{href: "/queue/clear"}
+              %i.fa.fa-times
+              Clear
+        
     .col-md-4
       .thumbnail.center.text-info          
-        %div.dashboard-icon
+        .dashboard-icon
           %i.fa.fa-database
-        %div.dashboard-thumb
+        .dashboard-thumb
           #{@qstatus[:consumer_count]} 
           %br
           Spiders
+        .dashboard-thumb
+          .col-md-10.col-md-offset-1
+            %form.form-inline{method: :post, action: "/spiders/add"}
+              .input-group
+                %select.form-control{name: "num"}
+                  %option{value: 1} 1
+                  %option{value: 5} 5
+                  %option{value: 10} 10
+                  %option{value: 20} 20
+                %span.input-group-btn
+                  %button.btn.btn-default{type: :submit} 
+                    %i.fa.fa-plus
+                    Add
+                  %a.btn.btn-default{href: "/spiders/clear"} 
+                    %i.fa.fa-times
+                    Clear          
     .col-md-4
       .thumbnail.center.text-info          
-        %div.dashboard-icon
+        .dashboard-icon
           %i.fa.fa-file-text-o
-        %div.dashboard-thumb
+        .dashboard-thumb
           #{@page_count} 
           %br
           Pages
-          
+        .dashboard-thumb  
+          .col-md-10.col-md-offset-1
+            %a.btn.btn-default{href: "/pages/clear"}
+              %i.fa.fa-times
+              Clear        

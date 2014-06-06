@@ -75,7 +75,22 @@ post "/add_url" do
   redirect "/"  
 end
 
+get "/queue/clear" do
+  conn = Bunny.new
+  conn.start
+  ch = conn.create_channel
+  q = ch.queue "saushengine", durable: true
+  q.purge
+  conn.close   
+  redirect "/"
+end
 
+get "/pages/clear" do
+  Location.dataset.delete
+  Word.dataset.delete
+  Page.dataset.delete
+  redirect "/"
+end
 get "/about" do
   haml :about
 end
