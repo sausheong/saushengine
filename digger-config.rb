@@ -35,7 +35,7 @@ rackup 'digger.ru'
 # The default is “false”.
 #
 # daemonize
-daemonize false
+daemonize true
 
 # Store the pid of the server in the file at “path”.
 #
