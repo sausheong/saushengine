@@ -1,3 +1,3 @@
-spider: puma -C spider-config.rb
-digger: puma -C digger-config.rb
+spider: puma -C spider-dev-config.rb
+digger: puma -C digger-dev-config.rb
 rabbitmq: rabbitmq-server
