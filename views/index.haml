@@ -1,6 +1,15 @@
 .content
   .row            
-    .col-md-offset-9.col-md-3{style: "padding-bottom: 10px;"}
+    .col-md-9
+      %form{method: :post, action: "/add_url"}
+        .input-group
+          %input.form-control{ name: "url", placeholder: "Add a seed URL into the queue"}
+          %span.input-group-btn
+            %button.btn.btn-default{type: :submit}
+              %i.fa.fa-plus
+              Add    
+    
+    .col-md-3{style: "padding-bottom: 20px;"}
       %form.form-inline{method: :post, action: "/spiders/add"}
         .input-group
           %select.form-control{name: "num"}

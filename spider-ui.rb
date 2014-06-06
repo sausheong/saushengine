@@ -61,6 +61,21 @@ post "/settings" do
   redirect "/settings"
 end
 
+get "/add_url" do
+  haml :add_url  
+end
+
+post "/add_url" do
+  conn = Bunny.new
+  conn.start
+  ch = conn.create_channel
+  q = ch.queue "saushengine", durable: true
+  q.publish params[:url], persistent: true
+  conn.close
+  redirect "/"  
+end
+
+
 get "/about" do
   haml :about
 end
