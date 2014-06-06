@@ -1,0 +1,16 @@
+.content
+  .row
+    .col-md-12
+      .lead.text-info{style: "font-size: 2em;"}
+        %i.fa.fa-gear
+        Settings
+        
+  .row
+    .col-md-12
+      %form{method: :post, action: "/settings"}
+        %textarea.form-control{name: "config", rows: 10}~@config
+        %hr
+        %button.btn.btn-primary{type: :submit}
+          Save
+        
+            

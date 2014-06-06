@@ -1,6 +1,6 @@
 require './models'
 require './spider'
-
+require 'open-uri'
 
 configure do
   enable :sessions
@@ -46,6 +46,19 @@ get "/logs" do
   end_pg = (@current_page > @logs.page_count - 4) ? @logs.page_count : @current_page + 2
   @page_range = start_pg..end_pg  
   haml :logs
+end
+
+get "/settings" do
+  @config = open('spider.cfg').read
+  haml :settings  
+end
+
+post "/settings" do
+  text = params[:config]
+  open('spider.cfg', 'w') do |f|
+    f.puts text
+  end
+  redirect "/settings"
 end
 
 get "/about" do
