@@ -46,6 +46,7 @@ GEM
       rack
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    rika (1.5.0-java)
     robots (0.10.1)
     ruby-ntlm (0.0.1)
     sequel (4.10.0)
@@ -81,6 +82,7 @@ DEPENDENCIES
   pg (~> 0.17.1)
   puma (~> 2.7.1)
   rest-client (~> 1.6.7)
+  rika (~> 1.5.0)
   robots (~> 0.10.1)
   ruby-ntlm (~> 0.0.1)
   sequel (~> 4.10.0)
