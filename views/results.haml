@@ -21,9 +21,11 @@
   %ol
     - @pages.each do |page|
       %li.text-info
-        %a{style: 'font-size: 1.2em;', href: page.url}=page.title
+        %a{style: 'font-size: 1.2em;', href: page.url}
+          =page.title.empty?  ? "(NO TITLE)" : page.title
         %br
         %small
           .muted
             %i.fa.fa-link
-            =page.url  
+            %a{href: page.url}
+              =page.url  
