@@ -2,9 +2,11 @@ module Spider
   
   # HTML Spider - extracts text and links for text/html files
   class HTML
+    attr_accessor :options, :text, :title, :words, :links
     
     # get the raw text from the url; here it is HTML
-    def get_raw_text(url, options)
+    def parse(url, options)
+      @options = options
       if options[:ntlm]
         begin
           u = Addressable::URI.parse(url).normalize
@@ -19,31 +21,55 @@ module Spider
       else
         html = open(url).read
       end
-      html
+      @text = html
+      @links = extract_all_links(html, url)
+      @title = extract_title(html)
+      @words = extract_all_words(html)
     end
-
-    # If it is a relative url, add the base url
-    def extract_all_links(type, html, base)
-      links = []
-      if type == "text/html"        
-        base_url = URI.parse(base)
-        doc = Nokogiri::HTML(html)
-        
-        doc.css("a").each do |node|      
-          begin
-            uri = URI(node['href'])
-            if uri.absolute? and uri.scheme != "javascript"     
-              links << uri.to_s
-            elsif uri.path.start_with?("/")
-              uri = base_url + uri
-            end
-          rescue
-            # don't do anything
+  
+    # add to queue
+    def add_to_queue
+      conn = Bunny.new
+      conn.start
+      ch = conn.create_channel
+      q = ch.queue "saushengine", durable: true
+      
+      if @options[:domains] == "*"
+        @links.each do |link|
+          q.publish link, persistent: true
+        end        
+      else 
+        domains = @options[:domains].split(",").map{|i| i.strip}
+        @links.each do |link|
+          uri = Addressable::URI.parse(link).normalize
+          if domains.map{|d| uri.hostname.end_with?(d)}.inject(:|)
+            q.publish link, persistent: true
           end
-        end    
-        links.uniq        
+        end        
       end
-      return links
+      conn.close    
+    end    
+
+    private
+    
+    # If it is a relative url, add the base url
+    def extract_all_links(html, base)
+      links = []
+      base_url = URI.parse(base)
+      doc = Nokogiri::HTML(html)      
+      doc.css("a").each do |node|      
+        begin
+          uri = URI(node['href'])
+          if uri.absolute? and uri.scheme != "javascript"     
+            links << uri.to_s
+          elsif uri.path.start_with?("/")
+            uri = base_url + uri
+          end
+        rescue
+          # don't do anything
+        end
+      end    
+      links.uniq        
     end
   
     # extract the title of this text
@@ -88,29 +114,6 @@ module Spider
       end
     end  
   
-  
-    # add to queue
-    def add_to_queue(links, options)
-      conn = Bunny.new
-      conn.start
-      ch = conn.create_channel
-      q = ch.queue "saushengine", durable: true
-      
-      if options[:domains] == "*"
-        links.each do |link|
-          q.publish link, persistent: true
-        end        
-      else 
-        domains = options[:domains].split(",").map{|i| i.strip}
-        links.each do |link|
-          uri = Addressable::URI.parse(link).normalize
-          if domains.map{|d| uri.hostname.end_with?(d)}.inject(:|)
-            q.publish link, persistent: true
-          end
-        end        
-      end
-      conn.close    
-    end    
 
   end
 end

@@ -27,37 +27,31 @@ module Spider
       return
     end
 
-    type = simple_mime_type(url, options)  
-
+    type = get_mime_type(url, options)  
     spider = get_spider(type)
-
-    text = spider.get_raw_text(url, options)
-
+    spider.parse(url, options)
+    
     if page.nil?
-      title = spider.extract_title text
-      page = Page.create(title: title, url: uri.to_s, host: uri.host, mime_type: type)        
+      page = Page.create(title: spider.title, url: uri.to_s, host: uri.host, mime_type: type)        
     end
     # delete existing locations
     page.remove_all_locations
 
-    words = spider.extract_all_words text
-
-    words.each_with_index do |word, index|
+    spider.words.each_with_index do |word, index|
       stem = word.downcase.stem
       w = Word.find_or_create(stem: stem)
       Location.create(word: w, page: page, position: index)
     end
     
     unless options[:do_not_extract_link]
-      links = spider.extract_all_links(type, text, url)    
-      unless links.nil? or links.empty?
-        spider.add_to_queue(links, options)
+      unless spider.links.nil? or spider.links.empty?
+        spider.add_to_queue
       end
     end
   end
 
   # get the simple mime-type of the given URL
-  def simple_mime_type(url, options)
+  def get_mime_type(url, options)
     uri = Addressable::URI.parse(url).normalize
     if uri.scheme == "https" or uri.scheme == "http"
       if options[:ntlm]
@@ -69,7 +63,7 @@ module Spider
         content_type = RestClient.head(uri.to_s).headers[:content_type]
       end
     else
-      content_type = MimeMagic.by_magic(File.open(uri.to_s)).type
+      content_type = MimeMagic.by_magic(open(uri.to_s)).type
     end
     MIME::Type.new(content_type).simplified
   end
