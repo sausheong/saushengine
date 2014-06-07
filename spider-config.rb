@@ -27,7 +27,7 @@ rackup 'spider.ru'
 #
 # The default is “development”.
 #
-# environment 'production'
+environment 'production'
 
 # Daemonize the server into the background. Highly suggest that
 # this be combined with “pidfile” and “stdout_redirect”.
