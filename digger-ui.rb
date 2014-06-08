@@ -12,17 +12,13 @@ helpers Loggable
 
 get "/" do
   types = DB["select mime_type from pages group by mime_type"].all.map{|i| i[:mime_type]}
-  p types
   @mime_types = MIMETYPES.delete_if {|k,v| !types.include?(k)}
-  p @mime_types
   haml :search, layout: :digger_layout
 end
 
 post "/q" do
   types = DB["select mime_type from pages group by mime_type"].all.map{|i| i[:mime_type]}
-  p types
   @mime_types = MIMETYPES.delete_if {|k,v| !types.include?(k)}
-  p @mime_types
   digger = Digger.new
   
   options = {
