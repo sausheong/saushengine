@@ -30,7 +30,7 @@ module Ranker
     dist, total = [], []
     found_words.each_with_index { |w, index| total << "loc#{index}.position" }    
     total.size.times { |index| dist << "abs(#{total[index]} - #{total[index + 1]})" unless index == total.size - 1 }    
-    dist_sql = "select loc0.page_id, (#{dist.join(' + ')}) as dist #{common_select}, #{total.join(", ")} order by dist asc"  
+    dist_sql = "select loc0.page_id, (#{dist.join(' + ')}) as dist #{common_select}, #{total.join(", ")} order by dist asc" 
     list = DB.fetch(dist_sql).all
     rank = Hash.new
     list.size.times { |i| rank[list[i][:page_id]] = list[0][:dist].to_f*importance/list[i][:dist].to_f }
@@ -42,27 +42,34 @@ class Digger
   include Ranker
   attr_accessor :options
   
-  def search(text, options={ranks: {frequency: 0.60, location: 0.20, distance: 0.20 }, size: 50})
+  def search(text, options={})
     @options = options
     search_words = words_from text
       
     found_words = Word.where(stem: search_words)
     return [] if found_words.count == 0
     
-    tables, joins, ids = [], [], []
+    tables, joins, ids, pages = [], [], [], []
     found_words.each_with_index { |w, index|
       tables << "locations loc#{index}"
       joins << "loc#{index}.page_id = loc#{index+1}.page_id"
-      ids << "loc#{index}.word_id = #{w.id}"    
+      ids << "loc#{index}.word_id = #{w.id}"  
+      pages << "loc#{index}.page_id = pages.id"  
     }
     joins.pop
-    common_select = "from #{tables.join(', ')} where #{(joins + ids).join(' and ')} group by loc0.page_id"  
+    
+    if options[:mime_type].nil? or options[:mime_type].empty?
+      mime_type = ""
+    else
+      mime_type = "and pages.mime_type = '#{options[:mime_type]}' and #{pages.join(' and ')}"
+    end
+    common_select = "from pages, #{tables.join(', ')} where #{(joins + ids).join(' and ')} #{mime_type} group by loc0.page_id"  
     rankings = []
     options[:ranks].each do |algorithm, importance|
       rankings << self.send(algorithm, common_select, found_words, importance)
     end
     results = merge rankings
-    results[0..49]
+    results.first options[:size]
   end
   
   def merge(rankings)
