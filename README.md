@@ -7,7 +7,6 @@ _This is work in progress, please do not use yet!_
 SaushEngine is a simple and customizable search engine that allows you to crawl through anything and anywhere for data. You can use it to crawl an intranet or a file server for documents, spreadsheets and slides or even your computer.
 
 
-
 ## How it works
 
 The search engine has two parts:
@@ -135,7 +134,23 @@ The default built-in search algorithms are:
 
 Each algorithm is assigned an importance percentage, which determines how important the algorithm is in getting the right results. You can tweak this accordingly. More importantly you can add additional algorithms.
 
+#### Frequency
 
+The frequency ranking algorithm is quite simple. The page that has more of the search words is assumed to be more relevant.
+
+
+#### Location
+
+The location ranking algorithm is also very simple. The assumption made here is that if the search word is near to the top of the document, the page is more relevant.
+
+#### Distance
+
+The distance ranking algorithm inspects the distance of the search words between each other on every page. The closer the words are to each other on a page, the higher that page will be ranked. For example, if I search for 'brown fox' in these 2 documents:
+
+1. The quick brown fox jumped over the lazy dog
+2.  The brown dog chased after the fox.
+
+The will both turn up the search results, but document 1 will be more relevant as the distance between 'brown' and 'fox' in document 1 is 0 while in document 2 it is 4.
 
 ### Document processing algorithms
 
