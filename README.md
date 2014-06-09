@@ -2,9 +2,11 @@
 
 _This is work in progress, please do not use yet!_
 
+<a href="http://sweetclipart.com/cute-white-baby-seal-888"><img src="public/images/seal_baby.png" width="200px"/></a>
+
 SaushEngine is a simple and customizable search engine that allows you to crawl through anything and anywhere for data. You can use it to crawl an intranet or a file server for documents, spreadsheets and slides or even your computer.
 
-<a href="http://sweetclipart.com/cute-white-baby-seal-888"><img src="images/seal_baby.png" width="200px"/></a>
+
 
 ## How it works
 
