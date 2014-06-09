@@ -4,7 +4,7 @@ _This is work in progress, please do not use yet!_
 
 SaushEngine is a simple and customizable search engine that allows you to crawl through anything and anywhere for data. You can use it to crawl an intranet or a file server for documents, spreadsheets and slides or even your computer.
 
-![](images/seal_baby.png =200x)
+![](images/seal_baby.png)
 
 ## How it works
 
