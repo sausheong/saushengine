@@ -4,13 +4,14 @@ _This is work in progress, please do not use yet!_
 
 SaushEngine is a simple and customizable search engine that allows you to crawl through anything and anywhere for data. You can use it to crawl an intranet or a file server for documents, spreadsheets and slides or even your computer.
 
+![http://sweetclipart.com/cute-white-baby-seal-888](images/baby_seal.png =200x)
 
 ## How it works
 
 The search engine has two parts:
 
 1. _Spider_ - goes out to collect data for the search engine. The Spider includes the message queue and the index database. The Spider crawls through URLs in the message queue, given initial seeds in the queue, processes the documents found and saves data into the index database. The Spider is controlled with a web interface.
-2. _Digger_ - allows your user to search through the index database. 
+2. _Digger_ - allows your user to search through the index database. The Digger algorithms are customisable and configurable.
 
 
 ## Features
